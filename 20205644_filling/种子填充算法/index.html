@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20205644--李易燔--种子填充算法</title>
+</head>
+<body>
+    <div>
+        <canvas id="seed_filling_area" width="500" height="500" style="border:1px solid red;" onmousedown="getPoint(event);"></canvas>
+        <br><br>
+        <input type="button" value="闭合图形" style="width:100px;" onclick="pix_close();"/><br>
+        <input type="button" value="继续添加多边形" style="width:200px;" onclick="add_newpic();"/><br>
+        <input type="button" value="填充" style="width:100px;" onclick="filling_start();"/>  
+    </div>
+    <script src="seed_filling.js"></script>
+</body>
+</html>
