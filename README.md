@@ -126,6 +126,62 @@ js，convas
 
 ### Cohen-Sutherland算法：
 
+#### 算法：
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/Cohen-sutherland.jpg?raw=true" width="90%" height="50%"  />
+
+#### 运行效果：
+
+首先画很多线段
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/cspre1.png?raw=true" width="50%" height="50%"  />
+
+点击创建方块按钮，点击矩形对角两个点选择矩形区域
+
+之后点击进行裁剪按钮
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/cspre2.png?raw=true" width="50%" height="50%"  />
+
+打开开发者工具
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/cspre3.png?raw=true" width="50%" height="50%"  />
+
+查看相关信息
+
+### Midpoint Subdivision Line Clipping算法：
+
+#### 原理：
+
+1、将直线的两端点P1、P2编码得：C1、C2；
+2、判别
+根据C1和C2的具体值，可以有三种情况：
+（1）C1=C2＝0，表明两端点全在窗口内，因而整个线段也在窗内，
+          应予保留。
+（2）C1&C2≠0，表明两端点必定处于某一边界的同一外侧，因而整个线段 
+          全在窗外，应予舍弃。
+（3）不属于上面两种情况，均需要求交点。
+
+3、求交点
+（1）令窗外端点为P1，如果窗外点不是P1，则P1和P2交换端点；
+（2）保留窗内端点P2到暂存器里；
+（3）对P1编码为C1；
+（4）用中点公式求出中点 ，并编码得C；
+（5）按照中点算法的求交规则：
+　   若P1和P同侧，移动P1点；if((C1&C)!=0)　P1=P;
+　  否则，移动P2点。 　　  else　　　　　P2=P;
+（6）流程转（3），直到P1和P2相差一个单位时：令交点为P2，取
+     出暂存器的端点赋给P1，然后转向流程1。
+
+#### 运行：
+
+同上
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/mspre1.png?raw=true" width="50%" height="50%"  />
+
+
+
+
+
 
 
 
