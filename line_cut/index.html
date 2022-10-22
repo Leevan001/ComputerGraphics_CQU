@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="line_cut.js"></script>
+    <div>
+        <canvas id="line_cut" width="500" height="500" style="border:1px solid red;" onmousedown="getPoint(event);"></canvas><br><br>
+        <input type="button" value="创建裁剪方块区域" style="width:120px;" onclick="create_rec();"/>  <br><br>
+        <input type="button" value="进行直线裁剪" style="width:120px;" onclick="line_cut();"/> 
+    </div>
+</body>
+</html>
