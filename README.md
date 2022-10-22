@@ -179,6 +179,66 @@ js，convas
 
 <img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/mspre1.png?raw=true" width="50%" height="50%"  />
 
+## 文件目录
+
+│  README.md
+│  
+├─20205644_filling
+│  ├─扫描线填充算法
+│  │      index.html
+│  │      learning.js
+│  │      
+│  ├─种子填充算法
+│  │      index.html
+│  │      seed_filling.js
+│  │      
+│  └─种子填充算法 - 扫描线
+│          index.html
+│          seed_filling.js
+│          
+├─circlr&ellipse
+│      my_ ellipse.py
+│      my_circle.py
+│      
+├─draw_line
+│      my_Line2.0.py
+│      
+├─line_Cut
+│  ├─line_cutCohen-Sutherland
+│  │      index.html
+│  │      line_cut.js
+│  │      
+│  └─Midpoint Subdivision Line Clipping
+│          index.html
+│          Midpoint SubdivisionLineClipping.js
+│          
+├─pics
+│      circle_pre1 - 副本.png
+│      circle_pre1.png
+│      circle_pre2 - 副本.png
+│      circle_pre2.png
+│      Cohen-sutherland.jpg
+│      cspre1.png
+│      cspre2.png
+│      cspre3.png
+│      ellipse_pre1 - 副本.png
+│      ellipse_pre1.png
+│      ellipse_pre2 - 副本.png
+│      ellipse_pre2.png
+│      filling2.png
+│      filling3.png
+│      filling4.png
+│      filling5.png
+│      filling_1.png
+│      linepre1.png
+│      linepre2.png
+│      mspre1.png
+│      
+└─Polygon clipping
+    └─Weiler-Atherton
+
+
+
 
 
 
