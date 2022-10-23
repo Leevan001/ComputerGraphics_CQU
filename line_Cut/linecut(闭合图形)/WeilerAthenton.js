@@ -1,15 +1,4 @@
-var zuobiao=[],rect_flag=false,rect=[],intersection=[],my_rect=[],cross=[],cr_flag=false;
-class myPoint{//构建点
-    constructor(x,y,state){//state 0表示多边形，1表示入边，2表示出边
-        this.x=x;
-        this.y=y;
-        this.state=state;
-        this.flag=false;//是否已经遍历
-    }
-    point(){
-        return [this.x,this.y];
-    }
-}
+var zuobiao=[],rect_flag=false,rect=[];
 //console.log('Hello World!');
 function getPoint(event) {
     canvas = document.getElementById('polygon_cut');
@@ -26,7 +15,7 @@ function getPoint(event) {
     ctx.stroke();//进行绘制
     //console.log("rect_flag",rect_flag);
     if (!rect_flag){
-        zuobiao.push(new myPoint(tmp_x,tmp_y,0));
+        zuobiao.push([tmp_x,tmp_y]);
         if(zuobiao.length>1)
         drawline();      
     }else{
@@ -44,9 +33,6 @@ function getPoint(event) {
         }
     }  
 }
-function dis(x1,y1,x2,y2){//计算两点间的距离的平方，用于排序
-    return (x1-x2)**2+(y1-y2)**2;
-}
 function exchange(x1,x2){
     return [x2,x1];
 }
@@ -63,8 +49,8 @@ function drawline(){
     ctx.beginPath();//开始绘制
     ctx.lineWidth = 2;
     ctx.strokeStyle = 'blue';
-    start_x=zuobiao[zuobiao.length-2].x,start_y=zuobiao[zuobiao.length-2].y;
-    end_x=zuobiao[zuobiao.length-1].x,end_y=zuobiao[zuobiao.length-1].y;
+    start_x=zuobiao[zuobiao.length-2][0],start_y=zuobiao[zuobiao.length-2][1];
+    end_x=zuobiao[zuobiao.length-1][0],end_y=zuobiao[zuobiao.length-1][1];
     ctx.moveTo(start_x,start_y);//坐标起点
     //线的端点是圆，还可以是butt(正方)，square(正方，但是追加一段长为线段厚度一半的矩形区域)
     ctx.lineCap = 'square';
@@ -87,10 +73,10 @@ function drawline2(x1,y1,x2,y2){//将在区域内的直线变成黑色
 }
 
 function close_polygon(){
-    ctx.moveTo(zuobiao[zuobiao.length-1].x,zuobiao[zuobiao.length-1].y);//首尾闭合
+    ctx.moveTo(zuobiao[zuobiao.length-1][0],zuobiao[zuobiao.length-1][1]);//首尾闭合
     ctx.lineCap = 'square';
     ctx.lineWidth =1;
-    ctx.lineTo(zuobiao[0].x, zuobiao[0].y);
+    ctx.lineTo(zuobiao[0][0], zuobiao[0][1]);
     ctx.stroke();
     zuobiao.push(zuobiao[0]);
 }
@@ -107,14 +93,10 @@ function polygon_cut(){
     xmax=Math.max(x1,x2);
     ymin=Math.min(y1,y2);
     ymax=Math.max(y1,y2);
-    my_rect.push(new myPoint(xmin,ymax,0));
-    my_rect.push(new myPoint(xmin,ymin,0));
-    my_rect.push(new myPoint(xmax,ymin,0));
-    my_rect.push(new myPoint(xmax,ymax,0));//初始化my_rect
     
     for(i=0;i<zuobiao.length-1;i++){
-        [tmpline_x1,tmpline_y1]=[line_x1,line_y1]=zuobiao[i].point();
-        [tmpline_x2,tmpline_y2]=[line_x2,line_y2]=zuobiao[i+1].point();//需要保存原有信息
+        [line_x1,line_y1]=zuobiao[i];
+        [line_x2,line_y2]=zuobiao[i+1];
         while(1){
             //确定点的区域
             var c1=0,c2=0;
@@ -123,30 +105,6 @@ function polygon_cut(){
             console.log('c1',c1.toString(2),'c2',c2.toString(2));
             if((c1|c2)==0){//都在里面
                 drawline2(line_x1,line_y1,line_x2,line_y2);
-                //利用向量性质判断是否为焦点和焦点顺序
-                if((tmpline_x1-tmpline_x2)*(line_x1-line_x2)<0){
-                    //交换顺序
-                    [line_x1,line_x2]=exchange(line_x1,line_x2);
-                    [line_y1,line_y2]=exchange(line_y1,line_y2);
-                }
-                if(line_x1!=tmpline_x1&&line_x1!=tmpline_x2){
-                    if(!cr_flag){//是入点
-                        cross.push(new myPoint(line_x1,line_y1,1));
-                        cr_flag=true;
-                    }else{//出点
-                        cross.push(new myPoint(line_x1,line_y1,2));
-                        cr_flag=false;
-                    }
-                }
-                if(line_x2!=tmpline_x1&&line_x2!=tmpline_x2){
-                    if(!cr_flag){//是入点
-                        cross.push(new myPoint(line_x2,line_y2,1));
-                        cr_flag=true;
-                    }else{//出点
-                        cross.push(new myPoint(line_x2,line_y2,2));
-                        cr_flag=false;
-                    }
-                }
                 break;
             }else if((c1&c2)!=0){//都在外面且同区域
                 break;
@@ -175,7 +133,6 @@ function polygon_cut(){
                 }
             }
         }
-    }
-    console.log('cross',cross);  
+    }   
     
 }

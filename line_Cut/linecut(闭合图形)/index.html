@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>linecut多边形边框裁剪_20205644</title>
+</head>
+<body>
+    <script src="WeilerAthenton.js"></script>
+    <div>
+        <canvas id="polygon_cut" width="500" height="500" style="border:1px solid black;" onmousedown="getPoint(event);"></canvas><br><br>
+        <input type="button" value="闭合图形" style="width:120px;" onclick="close_polygon();"/>  <br>
+        <input type="button" value="创建裁剪方形区域" style="width:120px;" onclick="create_rec();"/>  <br>
+        <input type="button" value="进行多边形边界裁剪" style="width:120px;" onclick="polygon_cut();"/> 
+    </div>
+</body>
+</html>
