@@ -1,4 +1,4 @@
-var zuobiao=[],rect_flag=false,rect=[],intersection=[],my_rect=[],cross=[],cr_flag=false;
+var zuobiao=[],rect_flag=false,rect=[],intersection=[],my_rect=[],cross=[],cr_flag=false,newzuobiao=[];
 class myPoint{//构建点
     constructor(x,y,state){//state 0表示多边形，1表示入边，2表示出边
         this.x=x;
@@ -58,6 +58,15 @@ function encode(line_x1,line_y1,xmin,xmax,ymin,ymax){
     if(line_y1>ymax)c1+=8;
     return c1;
 }
+function findpoint(bias,x,y,myarray){
+    var tmpi;
+    for(tmpi=bias;tmpi<myarray.length;tmpi++){
+        if(x==myarray[tmpi].x&&y==myarray[tmpi].y){
+            return tmpi;
+        }
+    }
+    return -1;
+}
 function drawline(){
     //绘制线段
     ctx.beginPath();//开始绘制
@@ -99,7 +108,9 @@ function close_polygon(){
 function create_rec(){
     rect_flag=true; 
 }
+
 function polygon_cut(){
+    console.log('---------');
     rect_flag=false;
     [x1,y1]=rect[0];//矩形对角坐标
     [x2,y2]=rect[1];
@@ -110,7 +121,13 @@ function polygon_cut(){
     my_rect.push(new myPoint(xmin,ymax,0));
     my_rect.push(new myPoint(xmin,ymin,0));
     my_rect.push(new myPoint(xmax,ymin,0));
-    my_rect.push(new myPoint(xmax,ymax,0));//初始化my_rect
+    my_rect.push(new myPoint(xmax,ymax,0));//初始化my_rect,顺时针
+
+    ////深拷贝一份zuobiao，将在里面进行插入
+    // for(i=0;i<zuobiao.length;i++){
+    //     newzuobiao.push(new myPoint(zuobiao[i].x,zuobiao[i].y,zuobiao[i].state));
+    // }
+    newzuobiao=Array.from(zuobiao);
     
     for(i=0;i<zuobiao.length-1;i++){
         [tmpline_x1,tmpline_y1]=[line_x1,line_y1]=zuobiao[i].point();
@@ -120,8 +137,12 @@ function polygon_cut(){
             var c1=0,c2=0;
             c1=encode(line_x1,line_y1,xmin,xmax,ymin,ymax);
             c2=encode(line_x2,line_y2,xmin,xmax,ymin,ymax);
-            console.log('c1',c1.toString(2),'c2',c2.toString(2));
+            //console.log('--------i',i)
+            // console.log('line_x1',line_x1,'line_y1',line_y1);
+            // console.log('c1',c1.toString(2),'c2',c2.toString(2));
+
             if((c1|c2)==0){//都在里面
+                console.log('开始画线');
                 drawline2(line_x1,line_y1,line_x2,line_y2);
                 //利用向量性质判断是否为焦点和焦点顺序
                 if((tmpline_x1-tmpline_x2)*(line_x1-line_x2)<0){
@@ -131,19 +152,86 @@ function polygon_cut(){
                 }
                 if(line_x1!=tmpline_x1&&line_x1!=tmpline_x2){
                     if(!cr_flag){//是入点
-                        cross.push(new myPoint(line_x1,line_y1,1));
+                        cross.push(new myPoint(line_x1,line_y1,1));//cross只是用于测试交点是否准确
+                        //插入到被裁剪多边形中
+                        var tmpStart=findpoint(0,tmpline_x1,tmpline_y1,newzuobiao);//寻找线段两个端点在数组中的位置，
+                        var tmpEnd=findpoint(tmpStart,tmpline_x2,tmpline_y2,newzuobiao);//最后插入的范围一定在tmpStart和tmpEnd之间
+                        console.log('tmpStart',tmpStart,'tmpEnd',tmpEnd);
+                        if((tmpEnd-tmpEnd)>1){
+                            var tmpindex=tmpStart+1;
+                            var tmpdis=dis(line_x1,line_y1,tmpline_x1,tmpline_y1);
+                            for(;tmpindex<tmpEnd;tmpindex++){
+                                if(tmpdis<dis(newzuobiao[tmpindex].x,newzuobiao[tmpindex].y,tmpline_x1,tmpline_y1)){
+                                    console.log('正在插入');
+                                    newzuobiao.splice(tmpindex,0,new myPoint(line_x1,line_y1,1));
+                                    break;
+                                }
+                            }
+                            if(tmpindex==tmpEnd)newzuobiao.splice(tmpindex,0,new myPoint(line_x1,line_y1,1));
+                        }else newzuobiao.splice(tmpEnd,0,new myPoint(line_x1,line_y1,1));
+                        //插入到矩形中
                         cr_flag=true;
                     }else{//出点
                         cross.push(new myPoint(line_x1,line_y1,2));
+                        //插入到被裁剪多边形中
+                        var tmpStart=findpoint(0,tmpline_x1,tmpline_y1,newzuobiao);//寻找线段两个端点在数组中的位置，
+                        var tmpEnd=findpoint(tmpStart,tmpline_x2,tmpline_y2,newzuobiao);//最后插入的范围一定在tmpStart和tmpEnd之间
+                        console.log('tmpStart',tmpStart,'tmpEnd',tmpEnd);
+                        if((tmpEnd-tmpEnd)>1){
+                            var tmpindex=tmpStart+1;
+                            var tmpdis=dis(line_x1,line_y1,tmpline_x1,tmpline_y1);
+                            for(;tmpindex<tmpEnd;tmpindex++){
+                                if(tmpdis<dis(newzuobiao[tmpindex].x,newzuobiao[tmpindex].y,tmpline_x1,tmpline_y1)){
+                                    console.log('正在插入');
+                                    newzuobiao.splice(tmpindex,0,new myPoint(line_x1,line_y1,2));
+                                    break;
+                                }
+                            }
+                            if(tmpindex==tmpEnd)newzuobiao.splice(tmpindex,0,new myPoint(line_x1,line_y1,2));
+                        }else newzuobiao.splice(tmpEnd,0,new myPoint(line_x1,line_y1,2));
                         cr_flag=false;
                     }
                 }
                 if(line_x2!=tmpline_x1&&line_x2!=tmpline_x2){
                     if(!cr_flag){//是入点
                         cross.push(new myPoint(line_x2,line_y2,1));
+
+                        //插入到被裁剪多边形中
+                        var tmpStart=findpoint(0,tmpline_x1,tmpline_y1,newzuobiao);//寻找线段两个端点在数组中的位置，
+                        var tmpEnd=findpoint(tmpStart,tmpline_x2,tmpline_y2,newzuobiao);//最后插入的范围一定在tmpStart和tmpEnd之间
+                        console.log('tmpStart',tmpStart,'tmpEnd',tmpEnd);
+                        if((tmpEnd-tmpEnd)>1){
+                            var tmpindex=tmpStart+1;
+                            var tmpdis=dis(line_x2,line_y2,tmpline_x1,tmpline_y1);
+                            for(;tmpindex<tmpEnd;tmpindex++){
+                                if(tmpdis<dis(newzuobiao[tmpindex].x,newzuobiao[tmpindex].y,tmpline_x1,tmpline_y1)){
+                                    console.log('正在插入');
+                                    newzuobiao.splice(tmpindex,0,new myPoint(line_x2,line_y2,1));
+                                    break;
+                                }
+                            }
+                            if(tmpindex==tmpEnd)newzuobiao.splice(tmpindex,0,new myPoint(line_x2,line_y2,1));
+                        }else newzuobiao.splice(tmpEnd,0,new myPoint(line_x2,line_y2,1));
+
                         cr_flag=true;
                     }else{//出点
                         cross.push(new myPoint(line_x2,line_y2,2));
+                        //插入到被裁剪多边形中
+                        var tmpStart=findpoint(0,tmpline_x1,tmpline_y1,newzuobiao);//寻找线段两个端点在数组中的位置，
+                        var tmpEnd=findpoint(tmpStart,tmpline_x2,tmpline_y2,newzuobiao);//最后插入的范围一定在tmpStart和tmpEnd之间
+                        console.log('tmpStart',tmpStart,'tmpEnd',tmpEnd);
+                        if((tmpEnd-tmpEnd)>1){
+                            var tmpindex=tmpStart+1;
+                            var tmpdis=dis(line_x2,line_y2,tmpline_x1,tmpline_y1);
+                            for(;tmpindex<tmpEnd;tmpindex++){
+                                if(tmpdis<dis(newzuobiao[tmpindex].x,newzuobiao[tmpindex].y,tmpline_x1,tmpline_y1)){
+                                    console.log('正在插入');
+                                    newzuobiao.splice(tmpindex,0,new myPoint(line_x2,line_y2,2));
+                                    break;
+                                }
+                            }
+                            if(tmpindex==tmpEnd)newzuobiao.splice(tmpindex,0,new myPoint(line_x2,line_y2,2));
+                        }else newzuobiao.splice(tmpEnd,0,new myPoint(line_x2,line_y2,2));
                         cr_flag=false;
                     }
                 }
@@ -176,6 +264,8 @@ function polygon_cut(){
             }
         }
     }
-    console.log('cross',cross);  
+    console.log('cross',cross);
+    console.log('zuobiao',zuobiao);
+    console.log('newzuobiao',newzuobiao);
     
 }
