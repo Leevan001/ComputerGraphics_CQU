@@ -1,4 +1,34 @@
 var Coordinate=[],rect_flag=false,rect=[],intersection=[],my_rect=[],cross=[],cr_flag=false,newCoordinate=[],final_ans=[],changemyCoor=[];
+var canvas = document.getElementById('polygon_cut');
+var ctx = canvas.getContext('2d');
+/*填充的调试代码
+ctx.lineWidth = 1;
+ctx.strokeStyle = 'blue';
+ctx.moveTo(100,200);
+ctx.lineTo(400, 210);
+ctx.lineTo(300, 360);
+ctx.lineTo(120, 300);
+ctx.lineTo(100, 200);
+//ctx.closePath();
+ctx.fillStyle="green";
+ctx.fill();
+ctx.stroke();
+*/
+
+function myfill(parse){
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'red';
+    ctx.moveTo(parse[0].x,parse[0].y);
+    var filli=1;
+    for(;filli<parse.length;filli++){
+        ctx.lineTo(parse[filli].x,parse[filli].y);
+    }
+    ctx.fillStyle="green";
+    ctx.fill();
+    ctx.stroke();
+}
+
 class myPoint{//构建点
     constructor(x,y,state){//state 0表示多边形，1表示入边，2表示出边
         this.x=x;
@@ -12,8 +42,8 @@ class myPoint{//构建点
 }
 //console.log('Hello World!');
 function getPoint(event) {
-    canvas = document.getElementById('polygon_cut');
-    ctx = canvas.getContext('2d');
+    // canvas = document.getElementById('polygon_cut');
+    // ctx = canvas.getContext('2d');
     tmp_x = event.offsetX;
     tmp_y = event.offsetY;
     console.log('tmp_x :',tmp_x ,'tmp_y',tmp_y);
@@ -362,4 +392,7 @@ function polygon_cut(){
     console.log('----------');
     console.log('final_ans',final_ans);
     console.log('----------');
+    for(i=0;i<final_ans.length;i++){
+        myfill(final_ans[i]);
+    }
 }
