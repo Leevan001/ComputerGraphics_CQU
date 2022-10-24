@@ -366,6 +366,7 @@ function polygon_cut(){
                     newCoordinate[i].flag=true;
                     tmpans.push(new myPoint(newCoordinate[i].x,newCoordinate[i].y,newCoordinate[i].state));
                     i+=1;
+                    if(i>=newCoordinate.length-1)i=0;
                 }
                 //1和2是成对出现的
                 newCoordinate[i].flag=true;
