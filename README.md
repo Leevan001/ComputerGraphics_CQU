@@ -179,10 +179,86 @@ js，convas
 
 <img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/mspre1.png?raw=true" width="50%" height="50%"  />
 
+## 多边形裁剪算法
+
+### 要求：
+
+实现Weiler-Athenton多边形裁剪算法，编写裁剪的源程序，并能在计算机上编译运行，画出正确的图形。
+
+### Weiler-Athenton多边形裁剪算法：
+
+#### 步骤：
+
+1. 建顶点表；
+
+2. 求交点；
+
+3. 裁剪… …
+
+#### 详细流程：
+
+* 1、顺时针输入被裁剪多边形顶点序列Ⅰ放入数组1中。
+* 2、顺时针输入裁剪窗口顶点序列Ⅱ放入数组2中。
+* 3、求出被裁剪多边形和裁剪窗口相交的所有交点，并给每个交点
+       打上  “入”、“出”标记。
+  　 然后将交点按顺序插入序列Ⅰ得到新的顶点序列Ⅲ，并放入数组3中；
+      同样也将交点按顺序插入序列Ⅱ得到新的顶点序列Ⅳ，放入数组4中；
+* 4、初始化输出数组Q，令数组Q为空。接着从数组3中寻找“入”点。
+  　　　 如果“入”点没找到，程序结束。
+* 5、如果找到“入”点，则将“入”点放入S中暂存。
+* 6、将“入”点录入到输出数组Q中。并从数组3中将该“入”点的“入”点标记删去。
+* 7、沿数组3顺序取顶点：
+  + 如果顶点不是“出点”，则将顶点录入到输出数组Q中，流程转第7步。
+  + 否则，流程转第8步。
+* 8、沿数组4顺序取顶点：
+       如果顶点不是“入点”，则将顶点录入到输出数组Q中，流程转第8步。
+    否则，流程转第9步。
+* 9、如果顶点不等于起始点S，流程转第6步，继续跟踪数组3。
+   　 否则，将数组Q输出；
+  　 流程转第4步，寻找可能存在的分裂多边形。
+  　 算法在第4步：满足“入”点没找到的条件时，算法结束。
+
+##### 运行环境chrome
+
+#### 运行效果展示
+
+首先画被裁多边形
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre1.png?raw=true" width="50%" height="50%"  />
+
+点击闭合图形button使被裁多边形首尾闭合
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre2.png?raw=true" width="50%" height="50%"  />
+
+点击创建区域button，并在画布上点击矩形两对角画矩形
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre3.png?raw=true" width="50%" height="50%"  />
+
+点击进行多边形裁剪
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre5.png?raw=true" width="50%" height="50%"  />
+
+打开开发者工具，查看相关信息
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre6.png?raw=true" width="50%" height="50%"  />
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre7.png?raw=true" width="50%" height="50%"  />
+
+
+
+进行多次测试
+
+<img src="https://github.com/Leevan001/ComputerGraphics_CQU/blob/main/pics/WApre8.png?raw=true" width="50%" height="50%"  />
+
+
+
+
+
 ## 文件目录
 
 ```
 │  README.md
+│  tree.txt
 │  
 ├─20205644_filling
 │  ├─扫描线填充算法
@@ -198,6 +274,7 @@ js，convas
 │          seed_filling.js
 │          
 ├─circlr&ellipse
+│      drawcircle&ellipse.html
 │      my_ ellipse.py
 │      my_circle.py
 │      
@@ -234,9 +311,23 @@ js，convas
 │      linepre1.png
 │      linepre2.png
 │      mspre1.png
+│      WApre1.png
+│      WApre2.png
+│      WApre3.png
+│      WApre4.png
+│      WApre5.png
+│      WApre6.png
+│      WApre7.png
+│      WApre8.png
 │      
 └─Polygon clipping
+    ├─Sutherland-Hodgeman多边形裁剪算法
+    │      index.html
+    │      WeilerAthenton.js
+    │      
     └─Weiler-Atherton
+            index.html
+            WeilerAthenton.js
 ```
 
 
